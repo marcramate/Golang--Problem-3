@@ -50,13 +50,13 @@ func sendTransection(payload payloadMock) (string, error) {
 	jsonPayload, err := json.Marshal(payload)
 
 	if err != nil {
-		return "", err
+		return "Error jsonPayload", err
 	}
 
 	resp, err := http.Post(URLsend, "application/json", bytes.NewBuffer(jsonPayload))
 
 	if err != nil {
-		return "", err
+		return "Error PostData", err
 	}
 
 	defer resp.Body.Close()
@@ -71,14 +71,16 @@ func checkStatus(txHash string) (string, error) {
 	resp, err := http.Get(URLcheck + txHash)
 
 	if err != nil {
-		return "", err
+		return "Error GetData", err
 	}
+
 	defer resp.Body.Close()
 
 	var resstatus Status
 	err = json.NewDecoder(resp.Body).Decode(&resstatus)
+
 	if err != nil {
-		return "", err
+		return "Error Decode", err
 	}
 
 	return resstatus.Tx_status, nil
